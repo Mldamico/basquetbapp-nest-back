@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLAYER
+  TRAINER
+  ASSISTANT
+}
+
+model Player {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String
+  fullName String
+  password String
+  active Boolean @default(false)
+  disable Boolean @default(false)
+  type Role @default(PLAYER)
+
+  team Team @relation(fields: [teamId], references: [id])
+  teamId Int
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email String
+  password String
+  type Role
+}
+
+enum Position {
+  BASE
+  ESCOLTA
+  ALERO
+  ALEPIVOT
+  PIVOT
+}
+
+
+
+model Play {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  urlPlay String
+  name String
+  active Boolean @default(true)
+  used Boolean @default(false)
+  shooterPosition Position
+  assistPosition Position? 
+  point Int @default(2)
+}
+
+model Team {
+  id Int @id @default(autoincrement())
+  name String
+  players Player[]
+}
+
+model Match {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  date DateTime @default(now())
+  opponent String
+  score Int
+  opponentScore Int
+
+}
+
+
+
+
+
+model UseOfPlay {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  quarter Int
+  scored Boolean
+  value Int
+}
+
+model Swap {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  position Position
+  quarter Int
+  time Int
+  timePlaying Int
+}
+
+
