@@ -11,41 +11,54 @@ datasource db {
 }
 
 enum Role {
-  PLAYER
-  TRAINER
-  ASSISTANT
+  PLAYER @map("player")
+  TRAINER @map("trainer")
+  ASSISTANT @map("assistant")
 }
 
 model Player {
   id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email String
-  fullName String
+  createdAt DateTime @default(now()) @map("updated_at")
+  updatedAt DateTime @updatedAt @map("created_at")
+  email String @unique
+  fullName String @map("full_name")
   password String
   active Boolean @default(false)
   disable Boolean @default(false)
   type Role @default(PLAYER)
+  shirtNumber Int? @map("shirt_number")
+  photo String? 
+  team Team? @relation(fields: [teamId], references: [id])
+  teamId Int? @map("team_id")
+  scorer UseOfPlay[] @relation("scorer")
+  assister UseOfPlay[] @relation("assister")
+  match Match[]
 
-  team Team @relation(fields: [teamId], references: [id])
-  teamId Int
+  enteringPlayer Swap[] @relation("entering_player")
+
+  leavingPlayer Swap[] @relation("leaving_player")
+
+  @@map("player")
 }
 
 model User {
   id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   email String
   password String
   type Role
+
+  @@map("user")
+
 }
 
 enum Position {
-  BASE
-  ESCOLTA
-  ALERO
-  ALEPIVOT
-  PIVOT
+  BASE @map("base")
+  ESCOLTA @map("escolta")
+  ALERO @map("alerto")
+  ALEPIVOT @map("ala pivot")
+  PIVOT @map("pivot")
 }
 
 
@@ -54,29 +67,38 @@ model Play {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  urlPlay String
+  instruction Json
   name String
   active Boolean @default(true)
   used Boolean @default(false)
   shooterPosition Position
   assistPosition Position? 
   point Int @default(2)
+  useOfPlays UseOfPlay[] @relation("use_of_plays")
+
+  @@map("play")
 }
 
 model Team {
   id Int @id @default(autoincrement())
   name String
   players Player[]
+
+  @@map("team")
 }
 
 model Match {
   id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
   date DateTime @default(now())
   opponent String
   score Int
-  opponentScore Int
+  opponentScore Int @map("opponent_score")
+  players Player[]
 
+  swaps Swap[]
+
+  @@map("match")
 }
 
 
@@ -85,19 +107,42 @@ model Match {
 
 model UseOfPlay {
   id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
   quarter Int
   scored Boolean
   value Int
+
+  play Play @relation("use_of_plays",fields: [playId], references: [id])
+  playId Int @map("play_id")
+
+  scorer Player @relation("scorer",fields: [scorerId], references: [id], map: "scorer_fk")
+  scorerId Int @map("scorer_id")
+
+  assister Player @relation("assister",fields: [assisterId], references: [id], map: "assister_fk")
+  assisterId Int @map("assister_id")
+
+  @@map("use_of_play")
 }
 
 model Swap {
-  id Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  id Int @id @default(autoincrement()) 
+  createdAt DateTime @default(now()) @map("created_at")
   position Position
   quarter Int
   time Int
-  timePlaying Int
+  timePlaying Int @map("time_playing")
+
+  enteringPlayer Player @relation("entering_player", fields: [enteringPlayerId], references: [id], map: "entering_player")
+  enteringPlayerId Int @map("entering_player_id")
+
+  leavingPlayer Player @relation("leaving_player", fields: [leavingPlayerId], references: [id], map: "leaving_player")
+  leavingPlayerId Int @map("leaving_player_id")
+
+  match Match @relation(fields: [matchId], references: [id])
+  matchId Int @map("match_id")
+
+  @@map("swap")
+
 }
 
 
