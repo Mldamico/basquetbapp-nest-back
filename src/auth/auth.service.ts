@@ -52,7 +52,7 @@ export class AuthService {
     return this.signToken(player.id, player.email);
   }
 
-  signToken(userId: number, email: string) {
+  async signToken(userId: number, email: string) {
     const payload = {
       sub: userId,
       email,
@@ -60,11 +60,12 @@ export class AuthService {
 
     const secret = this.config.get('JWT_SECRET');
 
+    const token = await this.jwt.signAsync(payload, {
+      expiresIn: '60m',
+      secret,
+    });
     return {
-      access_token: this.jwt.signAsync(payload, {
-        expiresIn: '60m',
-        secret,
-      }),
+      access_token: token,
     };
   }
 }

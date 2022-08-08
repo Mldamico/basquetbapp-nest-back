@@ -7,6 +7,8 @@ import { MatchModule } from './match/match.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { PlayerController } from './player/player.controller';
+import { PlayerModule } from './player/player.module';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     MatchModule,
     PrismaModule,
     AuthModule,
+    PlayerModule,
   ],
   controllers: [],
   providers: [AppService],
