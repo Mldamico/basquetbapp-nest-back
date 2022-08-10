@@ -15,4 +15,7 @@ export class SignUpDto {
 
   @IsOptional()
   urlPhoto?: string;
+
+  @IsOptional()
+  type: string;
 }

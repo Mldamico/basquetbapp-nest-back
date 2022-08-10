@@ -45,7 +45,7 @@ model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  email String
+  email String @unique
   password String
   type Role
 
