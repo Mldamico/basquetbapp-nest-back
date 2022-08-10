@@ -92,8 +92,8 @@ model Match {
   createdAt DateTime @default(now()) @map("created_at")
   date DateTime @default(now())
   opponent String
-  score Int
-  opponentScore Int @map("opponent_score")
+  score Int?
+  opponentScore Int? @map("opponent_score")
   players Player[]
 
   swaps Swap[]
