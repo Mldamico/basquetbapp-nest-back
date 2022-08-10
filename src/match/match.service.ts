@@ -26,4 +26,10 @@ export class MatchService {
       },
     });
   }
+
+  getMatch(id: number) {
+    return this.prismaService.match.findFirst({
+      where: { id },
+    });
+  }
 }
