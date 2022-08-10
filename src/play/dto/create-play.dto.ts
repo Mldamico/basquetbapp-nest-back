@@ -5,7 +5,7 @@ import {
   IsObject,
   IsOptional,
 } from 'class-validator';
-import { Position } from './types';
+import { Instruction, Position } from './types';
 
 export class CreatePlayDto {
   @IsNotEmpty()
@@ -19,5 +19,5 @@ export class CreatePlayDto {
   point: number;
 
   @IsArray()
-  instruction: {}[];
+  instruction: Instruction[];
 }

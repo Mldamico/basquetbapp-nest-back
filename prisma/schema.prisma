@@ -57,7 +57,7 @@ enum Position {
   BASE @map("base")
   ESCOLTA @map("escolta")
   ALERO @map("alerto")
-  ALEPIVOT @map("ala pivot")
+  ALAPIVOT @map("ala pivot")
   PIVOT @map("pivot")
 }
 
