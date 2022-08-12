@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { PlayerController } from './player/player.controller';
 import { PlayerModule } from './player/player.module';
+import { SwapModule } from './swap/swap.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PlayerModule } from './player/player.module';
     PrismaModule,
     AuthModule,
     PlayerModule,
+    SwapModule,
   ],
   controllers: [],
   providers: [AppService],

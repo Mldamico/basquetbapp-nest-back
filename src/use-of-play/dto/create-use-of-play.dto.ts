@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateUseOfPlayDto {
   @IsNotEmpty()
@@ -9,4 +9,13 @@ export class CreateUseOfPlayDto {
   @IsNotEmpty()
   @IsNumber()
   value: number;
+
+  @IsNotEmpty()
+  playId: number;
+
+  @IsNotEmpty()
+  scorerId: number;
+
+  @IsOptional()
+  assisterId: number;
 }
