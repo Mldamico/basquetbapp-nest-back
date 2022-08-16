@@ -6,7 +6,7 @@ import { JwtGuard, RolesGuard } from '../auth/guard';
 @Controller('player')
 export class PlayerController {
   @Get('/me')
-  @Roles(roles.ASSISTANT, roles.TRAINER)
+  @Roles(roles.PLAYER)
   @UseGuards(JwtGuard, RolesGuard)
   me(@GetUser() user) {
     return user;

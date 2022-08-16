@@ -32,7 +32,7 @@ model Player {
   teamId Int? @map("team_id")
   scorer UseOfPlay[] @relation("scorer")
   assister UseOfPlay[] @relation("assister")
-  match Match[]
+  match playerOnMatch[]
 
   enteringPlayer Swap[] @relation("entering_player")
 
@@ -94,13 +94,24 @@ model Match {
   opponent String
   score Int?
   opponentScore Int? @map("opponent_score")
-  players Player[]
+  players playerOnMatch[]
 
   swaps Swap[]
+
+  uses UseOfPlay[]
 
   @@map("match")
 }
 
+model playerOnMatch {
+  player Player @relation(fields: [playerId], references: [id])
+  playerId Int @map("player_id")
+  match Match @relation(fields: [matchId], references: [id])
+  matchId Int @map("match_id")
+
+  @@map("player_to_match")
+  @@id([playerId, matchId])
+}
 
 
 
@@ -120,6 +131,9 @@ model UseOfPlay {
 
   assister Player @relation("assister",fields: [assisterId], references: [id], map: "assister_fk")
   assisterId Int @map("assister_id")
+
+  match Match? @relation(fields: [matchId], references: [id])
+  matchId Int? @map("match_id")
 
   @@map("use_of_play")
 }

@@ -15,6 +15,7 @@ export class UseOfPlayService {
         playId: dto.playId,
         scorerId: dto.scorerId,
         assisterId: dto.assisterId,
+        matchId: dto.matchId,
       },
     });
   }

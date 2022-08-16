@@ -18,4 +18,7 @@ export class CreateUseOfPlayDto {
 
   @IsOptional()
   assisterId: number;
+
+  @IsOptional()
+  matchId: number;
 }

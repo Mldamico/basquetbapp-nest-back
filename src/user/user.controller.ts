@@ -7,7 +7,7 @@ import { RolesGuard } from 'src/auth/guard';
 @Controller('user')
 export class UserController {
   @Get('/me')
-  @Roles(roles.TRAINER)
+  @Roles(roles.TRAINER, roles.ASSISTANT)
   @UseGuards(JwtGuard, RolesGuard)
   me(@GetUser() user) {
     return user;

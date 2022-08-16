@@ -39,4 +39,18 @@ export class MatchController {
   getMatch(@Param('id') id: string) {
     return this.matchService.getMatch(+id);
   }
+
+  @Roles(roles.ASSISTANT)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Get('/match-by-plays/:id')
+  getMatchByPlays(@Param('id') id: string) {
+    return this.matchService.getMatchByPlays(+id);
+  }
+
+  @Roles(roles.ASSISTANT)
+  @UseGuards(JwtGuard, RolesGuard)
+  @Get('/match-by-players/:id')
+  getMatchByPlayer(@Param('id') id: string) {
+    return this.matchService.getMatchByPlayer(+id);
+  }
 }
