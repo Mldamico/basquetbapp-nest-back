@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { PlayerController } from './player/player.controller';
 import { PlayerModule } from './player/player.module';
 import { SwapModule } from './swap/swap.module';
+import { StadisticsModule } from './stadistics/stadistics.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { SwapModule } from './swap/swap.module';
     AuthModule,
     PlayerModule,
     SwapModule,
+    StadisticsModule,
   ],
   controllers: [],
   providers: [AppService],
