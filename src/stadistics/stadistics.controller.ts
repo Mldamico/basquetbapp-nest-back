@@ -28,4 +28,39 @@ export class StadisticsController {
   lessScoredPlays() {
     return this.stadisticsService.lessScoredPlays();
   }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-scored-player')
+  mostScoredPlayer() {
+    return this.stadisticsService.mostScoredPlayer();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-failed-player')
+  mostFailedPlayer() {
+    return this.stadisticsService.mostFailedPlayer();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-assister-player')
+  mostAssisterPlayer() {
+    return this.stadisticsService.mostAssisterPlayer();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-effective-against')
+  mostEffectiveAgainstOpponent() {
+    return this.stadisticsService.mostEffectiveAgainstOpponent();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/less-effective-assister')
+  lessEffectiveAssister() {
+    return this.stadisticsService.lessEffectiveAssister();
+  }
 }
