@@ -63,4 +63,39 @@ export class StadisticsController {
   lessEffectiveAssister() {
     return this.stadisticsService.lessEffectiveAssister();
   }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-quintet-plays')
+  mostQuintetPlays() {
+    return this.stadisticsService.mostQuintetPlays();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-quintet-points')
+  mostQuintetPoints() {
+    return this.stadisticsService.mostQuintetPoints();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-quintet-assists')
+  mostAssistQuintets() {
+    return this.stadisticsService.mostAssistQuintets();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-quintet-miss')
+  mostFailedQuintets() {
+    return this.stadisticsService.mostFailedQuintets();
+  }
+
+  @Roles(roles.PLAYER, roles.ASSISTANT, roles.TRAINER)
+  @UseGuards(JwtGuard)
+  @Get('/most-quintet-effective')
+  mostEffectiveQuintets() {
+    return this.stadisticsService.mostEffectiveQuintets();
+  }
 }

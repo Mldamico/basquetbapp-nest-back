@@ -33,7 +33,11 @@ model Player {
   scorer UseOfPlay[] @relation("scorer")
   assister UseOfPlay[] @relation("assister")
   match playerOnMatch[]
-
+  center UseOfPlay[] @relation("center")
+  shootingGuard UseOfPlay[] @relation("shooting_guard")
+  pointGuard UseOfPlay[] @relation("point_guard")
+  smallForward UseOfPlay[] @relation("small_forward")
+  powerForward UseOfPlay[] @relation("power_forward")
   enteringPlayer Swap[] @relation("entering_player")
 
   leavingPlayer Swap[] @relation("leaving_player")
@@ -126,11 +130,29 @@ model UseOfPlay {
   play Play @relation("use_of_plays",fields: [playId], references: [id])
   playId Int @map("play_id")
 
+  center Player @relation("center",fields: [centerId], references: [id])
+  centerId Int @map("center_id") @default(1)
+
+  shootingGuard Player @relation("shooting_guard", fields: [shootingGuardId], references: [id])
+  shootingGuardId Int @map("shooting_guard_id") @default(1)
+
+  pointGuard Player @relation("point_guard", fields: [pointGuardId], references: [id])
+  pointGuardId Int @map("point_guard_id") @default(1)
+
+  smallForward Player @relation("small_forward", fields: [smallForwardId], references: [id])
+  smallForwardId Int @map("small_forward_id") @default(1)
+
+  powerForward Player @relation("power_forward", fields: [powerForwardId], references: [id])
+  powerForwardId Int @map("power_forward_id") @default(1)
+
   scorer Player @relation("scorer",fields: [scorerId], references: [id], map: "scorer_fk")
-  scorerId Int @map("scorer_id")
+  scorerId Int @map("scorer_id") 
+
 
   assister Player @relation("assister",fields: [assisterId], references: [id], map: "assister_fk")
-  assisterId Int @map("assister_id")
+  assisterId Int @map("assister_id") 
+
+
 
   match Match? @relation(fields: [matchId], references: [id])
   matchId Int? @map("match_id")

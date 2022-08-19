@@ -77,18 +77,110 @@ export class StadisticsService {
 
   lessEffectiveAssister() {
     return this.prismaService.$queryRaw`
-      select p.name as play_name,
-        (((select COUNT(ufpbis.id)::FLOAT from use_of_play ufpbis  
-        where ufpbis.scored = true and ufpbis.play_id = p.id and ufpbis.assister_id = pl.id 
-        and (ufpbis.assister_id is not null or ufpbis.scorer_id <> ufpbis.assister_id))  
+      SELECT p.name AS play_name,
+        (((SELECT COUNT(ufpbis.id)::FLOAT FROM use_of_play ufpbis  
+        WHERE ufpbis.scored = true AND ufpbis.play_id = p.id AND ufpbis.assister_id = pl.id 
+        AND (ufpbis.assister_id IS NOT NULL OR ufpbis.scorer_id <> ufpbis.assister_id))  
         / COUNT(ufp.id)::FLOAT)::FLOAT*100)::FLOAT AS efectivity, 
         pl.full_name
-        from use_of_play ufp 
-        join play p on p.id = ufp.play_id  
-        join player pl on pl.id = ufp.assister_id  
-        where (ufp.assister_id is not null or ufp.scorer_id <> ufp.assister_id) 
-        group by pl.id, p.id 
-        order by play_name,efectivity ASC;
+        FROM use_of_play ufp 
+        JOIN play p ON p.id = ufp.play_id  
+        JOIN player pl ON pl.id = ufp.assister_id  
+        WHERE (ufp.assister_id IS NOT NULL OR ufp.scorer_id <> ufp.assister_id) 
+        GROUP BY pl.id, p.id 
+        ORDER BY play_name,efectivity ASC;
+    `;
+  }
+
+  mostQuintetPlays() {
+    return this.prismaService.$queryRaw`
+     SELECT p.name AS play_name,
+        CONCAT(b.full_name,', ',es.full_name,', ',al.full_name,', ',
+        ap.full_name,', ',pi.full_name) AS quintet,
+        COUNT(ufp.id)::INT AS amount FROM use_of_play ufp
+        JOIN play p ON p.id = ufp.play_id
+        JOIN player b ON b.id = ufp.point_guard_id 
+        JOIN player es ON es.id = ufp.shooting_guard_id
+        JOIN player al ON al.id = ufp.center_id
+        JOIN player ap ON ap.id = ufp.small_forward_id 
+        JOIN player pi ON pi.id = ufp.power_forward_id 
+        GROUP BY p.name, play_id, b.full_name,es.full_name,al.full_name ,point_guard_id ,ap.full_name,pi.full_name, shooting_guard_id ,center_id , small_forward_id ,power_forward_id 
+        ORDER BY play_name, amount DESC;
+    `;
+  }
+
+  mostQuintetPoints() {
+    return this.prismaService.$queryRaw`
+     SELECT p.name AS play_name,
+        CONCAT(b.full_name,', ',es.full_name,', ',al.full_name,', ',
+        ap.full_name,', ',pi.full_name) AS quintet,
+        SUM(ufp.value)::INT AS points FROM use_of_play ufp
+        JOIN play p ON p.id = ufp.play_id
+        JOIN player b ON b.id = ufp.point_guard_id 
+        JOIN player es ON es.id = ufp.shooting_guard_id
+        JOIN player al ON al.id = ufp.center_id
+        JOIN player ap ON ap.id = ufp.small_forward_id 
+        JOIN player pi ON pi.id = ufp.power_forward_id 
+        GROUP BY p.name, play_id, b.full_name,es.full_name,al.full_name ,point_guard_id ,ap.full_name,pi.full_name, shooting_guard_id ,center_id , small_forward_id ,power_forward_id 
+        ORDER BY play_name, points DESC;
+    `;
+  }
+
+  mostAssistQuintets() {
+    return this.prismaService.$queryRaw`
+    SELECT p.name AS play_name,
+        CONCAT(b.full_name,', ',es.full_name,', ',al.full_name,', ',
+        ap.full_name,', ',pi.full_name) AS quintet,
+        COUNT(ufp.id)::INT AS amount FROM use_of_play ufp
+        JOIN play p ON p.id = ufp.play_id
+        JOIN player b ON b.id = ufp.point_guard_id 
+        JOIN player es ON es.id = ufp.shooting_guard_id
+        JOIN player al ON al.id = ufp.center_id
+        JOIN player ap ON ap.id = ufp.small_forward_id 
+        JOIN player pi ON pi.id = ufp.power_forward_id 
+        WHERE scored = true
+        AND (ufp.assister_id IS NOT NULL OR ufp.scorer_id <> ufp.assister_id)
+        GROUP BY p.name, play_id, b.full_name,es.full_name,al.full_name ,point_guard_id ,ap.full_name,pi.full_name, shooting_guard_id ,center_id , small_forward_id ,power_forward_id 
+        ORDER BY play_name, amount DESC;
+    `;
+  }
+
+  mostFailedQuintets() {
+    return this.prismaService.$queryRaw`
+    SELECT p.name AS play_name,
+        CONCAT(b.full_name,', ',es.full_name,', ',al.full_name,', ',
+        ap.full_name,', ',pi.full_name) AS quintet,
+        COUNT(ufp.id)::INT AS amount FROM use_of_play ufp
+        JOIN play p ON p.id = ufp.play_id
+        JOIN player b ON b.id = ufp.point_guard_id 
+        JOIN player es ON es.id = ufp.shooting_guard_id
+        JOIN player al ON al.id = ufp.center_id
+        JOIN player ap ON ap.id = ufp.small_forward_id 
+        JOIN player pi ON pi.id = ufp.power_forward_id 
+        WHERE scored = false
+        GROUP BY p.name, play_id, b.full_name,es.full_name,al.full_name ,point_guard_id ,ap.full_name,pi.full_name, shooting_guard_id ,center_id , small_forward_id ,power_forward_id 
+        ORDER BY play_name, amount DESC;
+    `;
+  }
+
+  mostEffectiveQuintets() {
+    return this.prismaService.$queryRaw`
+    SELECT p.name AS play_name,
+        CONCAT(b.full_name,', ',es.full_name,', ',al.full_name,', ',
+        ap.full_name,', ',pi.full_name) AS quintet,
+        ((SELECT COUNT(ufpbis.id)::FLOAT FROM use_of_play ufpbis
+        WHERE ufpbis.scored = true AND ufpbis.play_id = p.id
+        AND ufpbis.point_guard_id = b.id AND ufpbis.shooting_guard_id= es.id AND ufpbis.center_id = al.id 
+        AND ufpbis.small_forward_id = ap.id AND ufpbis.power_forward_id= pi.id) 
+        / COUNT(ufp.id)::FLOAT*100)::FLOAT AS effecivity FROM use_of_play ufp
+        JOIN play p ON p.id = ufp.play_id
+        JOIN player b ON b.id = ufp.point_guard_id 
+        JOIN player es ON es.id = ufp.shooting_guard_id
+        JOIN player al ON al.id = ufp.center_id
+        JOIN player ap ON ap.id = ufp.small_forward_id 
+        JOIN player pi ON pi.id = ufp.power_forward_id 
+        GROUP BY p.name,p.id,b.id,pi.id, al.id, es.id, ap.id, play_id, b.full_name,es.full_name,al.full_name ,point_guard_id ,ap.full_name,pi.full_name, shooting_guard_id ,center_id , small_forward_id ,power_forward_id 
+        ORDER BY play_name, effecivity DESC;
     `;
   }
 }
